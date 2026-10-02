@@ -1,5 +1,6 @@
 [
-  { "month": "Septembre", "title": "First day", "text": "Le début de la rhéto." },
+  { "month": "Aout", "title": "First day", "text": "Le début de la rhéto." },
+  { "month": "Septembre", "title": "À compléter", "text": "" },
   { "month": "Octobre", "title": "À compléter", "text": "" },
   { "month": "Novembre", "title": "À compléter", "text": "" },
   { "month": "Décembre", "title": "À compléter", "text": "" },
@@ -8,5 +9,6 @@
   { "month": "Mars", "title": "À compléter", "text": "" },
   { "month": "Avril", "title": "À compléter", "text": "" },
   { "month": "Mai", "title": "À compléter", "text": "" },
-  { "month": "Juin", "title": "Last day", "text": "La dernière fois tous ensemble." }
+  { "month": "Juin", "title": "À compléter", "text": "" }
+  { "month": "Juillet", "title": "Last day", "text": "La dernière fois tous ensemble." }
 ]
