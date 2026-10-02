@@ -1,6 +1,9 @@
 [
-  { "name": "Prénom", "surname": "Nom", "class": "6A" },
-  { "name": "Prénom", "surname": "Nom", "class": "6A" },
+  { "name": "Benjamin", "surname": "Gendarme", "class": "6A" },
+  { "name": "Rayan", "surname": "Andres", "class": "6A" },
+  { "name": "Merlin", "surname": "De Ronge", "class": "6A" },
+  { "name": "Reda", "surname": "NOM", "class": "6A" },
+  { "name": "Arjon", "surname": "Palikeshti", "class": "6A" },
   { "name": "Prénom", "surname": "Nom", "class": "6B" },
   { "name": "Prénom", "surname": "Nom", "class": "6C" },
   { "name": "Prénom", "surname": "Nom", "class": "6D" },
