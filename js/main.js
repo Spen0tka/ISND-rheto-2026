@@ -26,13 +26,22 @@ load('data/events.json').then(ev=>{
 }).catch(()=>$('#events').textContent='Timeline indisponible pour le moment.');
 
 // Galerie : data/photos.json (généré automatiquement)
-const grid=$('#grid'),more=$('#more'),dlg=$('#lb'),N=60;
-let P=[],list=[],cat='',shown=0,cur=0;
+const grid=$('#grid'),more=$('#more'),dlg=$('#lb'),box=$('#q'),N=60;
+let P=[],list=[],cat='',words=[],shown=0,cur=0;
 const label=p=>p.title||'Souvenir · '+p.cat;
 const fmt=d=>new Date(d).toLocaleDateString('fr-BE',{day:'numeric',month:'long',year:'numeric'});
+// minuscules + sans accents, pour que "ete" trouve "Été"
+const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 
 function render(reset){
-  if(reset){grid.innerHTML='';shown=0;list=P.filter(p=>!cat||p.cat===cat);$('#empty').hidden=list.length>0}
+  if(reset){
+    grid.innerHTML='';shown=0;
+    list=P.filter(p=>(!cat||p.cat===cat)&&words.every(w=>p.k.includes(w)));
+    const n=list.length;
+    $('#empty').textContent=words.length?'Aucune photo ne correspond à cette recherche.':'Aucune photo pour le moment.';
+    $('#empty').hidden=n>0;
+    $('#found').textContent=words.length&&n?`${n} photo${n>1?'s':''} trouvée${n>1?'s':''}`:'';
+  }
   grid.insertAdjacentHTML('beforeend',list.slice(shown,shown+N).map((p,i)=>
     `<button class="ph" data-i="${shown+i}"><img src="thumbs/${p.id}.webp" width="${p.w}" height="${p.h}" alt="${esc(label(p))}" loading="lazy" decoding="async"></button>`).join(''));
   shown=Math.min(shown+N,list.length);more.hidden=shown>=list.length;
@@ -40,6 +49,10 @@ function render(reset){
 more.onclick=()=>render();
 grid.addEventListener('error',e=>e.target.closest('.ph')?.remove(),true); // image manquante : on l'ignore
 grid.onclick=e=>{const b=e.target.closest('.ph');if(b)open(+b.dataset.i)};
+
+// Recherche : chaque mot tapé doit se trouver quelque part dans le titre
+box.oninput=()=>{words=norm(box.value).split(/\s+/).filter(Boolean);if(P.length)render(true)};
+box.onkeydown=e=>{if(e.key==='Enter')box.blur()}; // referme le clavier du téléphone
 
 function open(i){
   cur=(i+list.length)%list.length;const p=list[cur],im=$('img',dlg),cap=$('figcaption',dlg);
@@ -57,7 +70,7 @@ let x0;dlg.ontouchstart=e=>x0=e.touches[0].clientX;
 dlg.ontouchend=e=>{const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)open(cur+(d<0?1:-1))};
 
 load('data/photos.json').then(d=>{
-  P=d.photos;
+  P=d.photos;P.forEach(p=>p.k=norm(p.title));
   $('#filters').innerHTML=['Tous',...d.categories].map((c,i)=>`<button aria-pressed="${!i}" data-c="${i?esc(c):''}">${esc(c)}</button>`).join('');
   $('#filters').onclick=e=>{const b=e.target.closest('button');if(!b)return;cat=b.dataset.c;
     [...$('#filters').children].forEach(x=>x.setAttribute('aria-pressed',x===b));render(true)};
