@@ -38,6 +38,7 @@
   <p class="kicker">Archive photographique</p>
   <h2>Memories</h2>
   <input id="q" type="search" placeholder="Rechercher une photo…" aria-label="Rechercher une photo par titre" autocomplete="off" enterkeyhint="search">
+  <p id="who" hidden></p>
   <div id="filters" role="group" aria-label="Catégories"></div>
   <p id="found" aria-live="polite"></p>
   <div id="grid"></div>
@@ -48,6 +49,9 @@
 <section id="classes">
   <p class="kicker">La promotion</p>
   <h2>Classes</h2>
+  <input id="sq" type="search" placeholder="Rechercher un élève…" aria-label="Rechercher un élève" autocomplete="off" enterkeyhint="search">
+  <p class="mute">Touchez un nom pour voir toutes ses photos.</p>
+  <p id="snone" class="mute" hidden>Aucun élève trouvé.</p>
   <div id="students"></div>
 </section>
 
