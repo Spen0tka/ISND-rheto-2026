@@ -1,5 +1,6 @@
 """Génère le site dans _site/ : photos optimisées, miniatures et data/photos.json.
-Dossier = catégorie (préfixe "01 " pour l'ordre). Fichier = [AAAA-MM-JJ_]Titre.jpg"""
+Dossier = catégorie (préfixe "01 " pour l'ordre).
+Fichier = [AAAA-MM-JJ_]Titre [Prénom, Prénom].jpg  (étiquettes entre crochets, invisibles)"""
 import json, re, shutil, hashlib
 from pathlib import Path
 from PIL import Image, ImageOps
@@ -21,8 +22,15 @@ for folder in sorted(p for p in Path("photos").iterdir() if p.is_dir()):
         continue
     cats.append(label)
     for f in files:
-        m = re.match(r"(\d{4}-\d{2}-\d{2})(?:[\s_]+(.*))?$", f.stem)
-        date, title = (m.group(1), m.group(2) or "") if m else ("", f.stem)
+        tags = []
+
+        def grab(m):
+            tags.extend(t.strip() for t in re.split(r"[,;]", m.group(1)) if t.strip())
+            return ""
+
+        stem = re.sub(r"\s*\[(.*?)\]", grab, f.stem).strip()
+        m = re.match(r"(\d{4}-\d{2}-\d{2})(?:[\s_]+(.*))?$", stem)
+        date, title = (m.group(1), m.group(2) or "") if m else ("", stem)
         if re.fullmatch(r"[A-Za-z]{0,5}[_\- ]?[\d_\- ()]+", title):  # IMG_1234 => pas de titre
             title = ""
         try:
@@ -33,7 +41,7 @@ for folder in sorted(p for p in Path("photos").iterdir() if p.is_dir()):
             big.save(OUT / "photos" / f"{h}.webp", quality=80)
             im.thumbnail((600, 600))
             im.save(OUT / "thumbs" / f"{h}.webp", quality=75)
-            photos.append({"id": h, "cat": label, "date": date, "title": title.strip(), "w": im.width, "h": im.height})
+            photos.append({"id": h, "cat": label, "date": date, "title": title.strip(), "tags": tags, "w": im.width, "h": im.height})
         except Exception as e:
             print("IGNORÉE :", f, "-", e)
 
