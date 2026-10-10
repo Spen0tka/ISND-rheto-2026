@@ -36,8 +36,10 @@
 
 <section id="memories">
   <p class="kicker">Archive photographique</p>
-  <h2>Souvenirs</h2>
+  <h2>Memories</h2>
+  <input id="q" type="search" placeholder="Rechercher une photo…" aria-label="Rechercher une photo par titre" autocomplete="off" enterkeyhint="search">
   <div id="filters" role="group" aria-label="Catégories"></div>
+  <p id="found" aria-live="polite"></p>
   <div id="grid"></div>
   <p id="empty" class="mute" hidden>Aucune photo pour le moment.</p>
   <button id="more" hidden>Voir plus</button>
