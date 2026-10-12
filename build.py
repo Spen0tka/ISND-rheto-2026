@@ -9,6 +9,7 @@ OUT = Path("_site")
 shutil.rmtree(OUT, ignore_errors=True)
 OUT.mkdir()
 shutil.copy("index.html", OUT)
+shutil.copy("admin.html", OUT)
 for d in ("css", "js", "data"):
     shutil.copytree(d, OUT / d)
 (OUT / "photos").mkdir()
